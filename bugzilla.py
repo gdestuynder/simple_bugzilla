@@ -86,6 +86,8 @@ class Bugzilla:
         headers = {'Content-Type': 'application/json'}
         r = requests.get('{url}{q}?api_key={key}{params}'.format(url=self.url, q=q, key=self.api_key, params=params),
                         headers=headers)
+        if (not r.ok):
+            raise Exception(r.url, r.reason, r.status_code, r.json())
         return DotDict(r.json())
 
     def _post(self, q, payload='', params=''):
@@ -94,4 +96,6 @@ class Bugzilla:
         headers = {'Content-Type': 'application/json'}
         r = requests.post('{url}{q}?api_key={key}{params}'.format(url=self.url, q=q, key=self.api_key, params=params),
                         headers=headers, data=payload)
+        if (not r.ok):
+            raise Exception(r.url, r.reason, r.status_code, r.json())
         return DotDict(r.json())
