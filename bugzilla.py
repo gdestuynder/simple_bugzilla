@@ -59,6 +59,16 @@ class Bugzilla:
         '''http://bugzilla.readthedocs.org/en/latest/api/core/v1/attachment.html#get-attachment'''
         return self._get('bug/attachment/{attachmentid}'.format(attachmentid=attachmentid))
 
+    def update_attachment(self, attachmentid, attachment_update):
+        '''http://bugzilla.readthedocs.org/en/latest/api/core/v1/attachment.html#update-attachment'''
+        assert type(attachment_update) is DotDict
+        if (not 'attachment_id' in attachment_update):
+            attachment_update.attachment_id = attachmentid
+            attachment_update.ids = [attachmentid]
+
+        return self._post('bug/attachment/{attachmentid}'.format(attachmentid=attachmentid),
+                json.dumps(attachment_update))
+
     def post_attachment(self, bugid, attachment):
         '''http://bugzilla.readthedocs.org/en/latest/api/core/v1/attachment.html#create-attachment'''
         assert type(attachment) is DotDict
