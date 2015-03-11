@@ -59,14 +59,14 @@ class Bugzilla:
         '''http://bugzilla.readthedocs.org/en/latest/api/core/v1/attachment.html#get-attachment'''
         return self._get('bug/attachment/{attachmentid}'.format(attachmentid=attachmentid))
 
-    def update_attachment(self, attachmentid, attachment_update):
+    def put_attachment(self, attachmentid, attachment_update):
         '''http://bugzilla.readthedocs.org/en/latest/api/core/v1/attachment.html#update-attachment'''
         assert type(attachment_update) is DotDict
         if (not 'attachment_id' in attachment_update):
             attachment_update.attachment_id = attachmentid
             attachment_update.ids = [attachmentid]
 
-        return self._post('bug/attachment/{attachmentid}'.format(attachmentid=attachmentid),
+        return self._put('bug/attachment/{attachmentid}'.format(attachmentid=attachmentid),
                 json.dumps(attachment_update))
 
     def post_attachment(self, bugid, attachment):
@@ -113,6 +113,16 @@ class Bugzilla:
         if (q[-1] == '/'): q = q[:-1]
         headers = {'Content-Type': 'application/json'}
         r = requests.post('{url}{q}?api_key={key}{params}'.format(url=self.url, q=q, key=self.api_key, params=params),
+                        headers=headers, data=payload)
+        if (not r.ok):
+            raise Exception(r.url, r.reason, r.status_code, r.json())
+        return DotDict(r.json())
+
+    def _put(self, q, payload='', params=''):
+        '''Generic PUT wrapper including the api_key'''
+        if (q[-1] == '/'): q = q[:-1]
+        headers = {'Content-Type': 'application/json'}
+        r = requests.put('{url}{q}?api_key={key}{params}'.format(url=self.url, q=q, key=self.api_key, params=params),
                         headers=headers, data=payload)
         if (not r.ok):
             raise Exception(r.url, r.reason, r.status_code, r.json())
