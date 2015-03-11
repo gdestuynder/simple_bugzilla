@@ -53,7 +53,7 @@ class Bugzilla:
 
     def get_attachments(self, bugid):
         '''http://bugzilla.readthedocs.org/en/latest/api/core/v1/attachment.html#get-attachment'''
-        return self._get('bug/{bugid}/attachment'.format(bugid=bugid))
+        return DotDict(self._get('bug/{bugid}/attachment'.format(bugid=bugid))['bugs'])
 
     def get_attachment(self, attachmentid):
         '''http://bugzilla.readthedocs.org/en/latest/api/core/v1/attachment.html#get-attachment'''
