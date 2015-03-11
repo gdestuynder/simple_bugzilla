@@ -51,6 +51,14 @@ class Bugzilla:
     def get_comment(self, commentid):
         return self._get('bug/comment/{commentid}'.format(commentid=commentid))
 
+    def get_attachments(self, bugid):
+        '''http://bugzilla.readthedocs.org/en/latest/api/core/v1/attachment.html#get-attachment'''
+        return self._get('bug/{bugid}/attachment'.format(bugid=bugid))
+
+    def get_attachment(self, attachmentid):
+        '''http://bugzilla.readthedocs.org/en/latest/api/core/v1/attachment.html#get-attachment'''
+        return self._get('bug/attachment/{attachmentid}'.format(attachmentid=attachmentid))
+
     def post_attachment(self, bugid, attachment):
         '''http://bugzilla.readthedocs.org/en/latest/api/core/v1/attachment.html#create-attachment'''
         assert type(attachment) is DotDict
