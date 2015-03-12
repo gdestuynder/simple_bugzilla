@@ -112,7 +112,8 @@ class Bugzilla:
         headers = {'Content-Type': 'application/json'}
         r = requests.get('{url}{q}?api_key={key}{params}'.format(url=self.url, q=q, key=self.api_key, params=params),
                         headers=headers)
-        if (not r.ok):
+        ret = DotDict(r.json())
+        if (not r.ok or ret.error == True):
             raise Exception(r.url, r.reason, r.status_code, r.json())
         return DotDict(r.json())
 
@@ -122,7 +123,8 @@ class Bugzilla:
         headers = {'Content-Type': 'application/json'}
         r = requests.post('{url}{q}?api_key={key}{params}'.format(url=self.url, q=q, key=self.api_key, params=params),
                         headers=headers, data=payload)
-        if (not r.ok):
+        ret = DotDict(r.json())
+        if (not r.ok or ret.error == True):
             raise Exception(r.url, r.reason, r.status_code, r.json())
         return DotDict(r.json())
 
@@ -132,6 +134,7 @@ class Bugzilla:
         headers = {'Content-Type': 'application/json'}
         r = requests.put('{url}{q}?api_key={key}{params}'.format(url=self.url, q=q, key=self.api_key, params=params),
                         headers=headers, data=payload)
-        if (not r.ok):
+        ret = DotDict(r.json())
+        if (not r.ok or ret.error == True):
             raise Exception(r.url, r.reason, r.status_code, r.json())
-        return DotDict(r.json())
+        return ret
