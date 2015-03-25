@@ -11,7 +11,13 @@
 
 import json
 import requests
-import urllib.parse
+try:
+    import urllib.parse
+    quote_url = urllib.parse.quote
+except ImportError:
+    #Well hello there python2 user!
+    import urllib
+    quote_url = urllib.quote
 import base64
 
 class DotDict(dict):
@@ -38,8 +44,8 @@ class Bugzilla:
         params = ''
         for i in terms:
             k = i.popitem()
-            params = '{p}&{new}={value}'.format(p=params, new=urllib.parse.quote(k[0]),
-                        value=urllib.parse.quote(k[1]))
+            params = '{p}&{new}={value}'.format(p=params, new=quote_url(k[0]),
+                        value=quote_url(k[1]))
         return DotDict(self._get('bug', params=params))
 
     def get_bug(self, bugid):
