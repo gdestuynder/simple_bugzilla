@@ -23,7 +23,7 @@ setup(
         keywords = "bugzilla client library",
         url = "https://github.com/gdestuynder/simple_bugzilla",
         long_description = read('README.rst'),
-        requires = [],
+        install_requires = ['requests'],
         classifiers = [
             "Development Status :: 5 - Production/Stable",
             "Topic :: Software Development :: Libraries :: Python Modules",
